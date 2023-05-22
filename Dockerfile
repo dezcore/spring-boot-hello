@@ -6,6 +6,9 @@ RUN ./mvnw dependency:go-offline
 COPY ./src ./src
 RUN ./mvnw clean install
 
+FROM builder as dev
+CMD ["./mvnw", "spring-boot:run"]
+
 FROM eclipse-temurin:17-jre-jammy
 WORKDIR /opt/app
 EXPOSE 8080
