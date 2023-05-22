@@ -7,14 +7,15 @@ COPY ./src ./src
 RUN ./mvnw clean install
 
 FROM builder as dev
-CMD ["./mvnw", "spring-boot:run"]
+CMD ["./mvnw", "spring-boot:run", "-Dspring-boot.run.profiles=dev"]
 
 FROM eclipse-temurin:17-jre-jammy
 WORKDIR /opt/app
 EXPOSE 8080
 COPY --from=builder /opt/app/target/*.jar /opt/app/*.jar
-ENTRYPOINT ["java", "-jar", "/opt/app/*.jar" ]
+ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=prod", "/opt/app/*.jar" ]
 
+#CMD ["./mvnw", "spring-boot:run", "-Dspring-boot.run.profiles=dev"]
 
 #FROM eclipse-temurin:17-jdk-jammy
 #RUN addgroup demogroup; adduser  --ingroup demogroup --disabled-password demo
